@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">SpellingWords</string>
     <string name="action_settings">Settings</string>
+    <string name="Default_Week">1</string>
+    <string name="SELECT_FROM">SELECT %s FROM %s</string>
+    <string name="SELECT_FROM_LEFT_OUTER_JOIN">SELECT %s FROM %s LEFT OUTER JOIN %s ON %s</string>
+    <string name="SELECT_FROM_LEFT_OUTER_JOIN_WHERE">SELECT %s FROM %s LEFT OUTER JOIN %s ON %s WHERE %s</string>
+    <string name="SELECT_FROM_WHERE">SELECT %s FROM %s WHERE %s</string>
+    <string name="AssetsPath">file:///assets/SpellingListDataBase.db</string>
 </resources>

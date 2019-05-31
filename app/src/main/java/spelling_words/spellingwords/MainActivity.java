@@ -1,21 +1,32 @@
 package spelling_words.spellingwords;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.Toast;
+import android.widget.ListView;
 import android.widget.ViewSwitcher;
 
+import java.io.IOException;
+import java.util.Scanner;
+
+import spelling_words.spellingwords.DataAccess.SpellingListData;
+import spelling_words.spellingwords.Interfaces.ITableLayoutCreator;
+import spelling_words.spellingwords.Interfaces.IViewController;
+import spelling_words.spellingwords.Interfaces.IWord;
+
 public class MainActivity extends AppCompatActivity {
-    private ViewSwitcher view;
+    ListView simpleList;
+    private IViewController view;
     private int exitAttempts = 2;
+    private ITableLayoutCreator tableLayoutCreator;
+    private SpellingListData spellingDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,28 +35,21 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Initialize viewSwitcher
-        view = (ViewSwitcher) findViewById(R.id.view);
-        final Button btn21 = (Button) findViewById(R.id.btnWord1);
-        TableLayout tblRow = findViewById(R.id.tableRow);
-        tblRow.getChildAt(1).addChildrenForAccessibility(new Button(super));
+        //Initialize Components
 
+        Button btn = findViewById(R.id.button6);
 
-        btn21.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view1) {
-                view.showNext();
+            public void onClick(View view) {
+                final Intent libraryPage = new Intent(MainActivity.this, SpellingActivity.class);
+
+                libraryPage.putExtra("string", "1");
+
+                startActivity(libraryPage);
             }
         });
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     @Override
@@ -72,30 +76,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(view.getDisplayedChild() == 1) { view.showPrevious(); }
-        else {
-            exitAttempts--;
-            Toast.makeText(this, String.valueOf(exitAttempts) + " attempts left to exit app.", Toast.LENGTH_SHORT).show();
-        }
-
-        if (exitAttempts == 0) {
+        if(view.isAppClosing()) {
             super.onBackPressed();
-        }
+        } else { view.showHomePage(); }
     }
 
-    Button createOnClickEvent(final Button click) {
-        click.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Initialize file with subject to study
-                //String file = click.getText().toString().replaceAll(" ", "") + ".txt";
-                //Display log on file name to load
-                Log.d("Switching view: ", "view2");
+    private void importFile(String load) {
+        Scanner read;
+        try {
+            read = new Scanner(getAssets().open(load));
 
-                    //switch views.
-                    view.showNext();
-                }
-        });
-        return click;
+            while (read.hasNext()) {
+                String[] parse = read.nextLine().split("ANSWER");
+                //IWord word =
+                //SpellingWords.getInstance().addSpellingWord()//addCard(new Card(parse[0], parse[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
